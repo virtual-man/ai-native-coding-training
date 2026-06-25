@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Native + AI Coding 培训材料</title>
+<style>
+  :root{
+    --bg:#08120d;--bg2:#0c1a13;--card:#0f2018;--card2:#13291e;
+    --ink:#e9f6ef;--ink-dim:#a3c2b3;--ink-faint:#6f9180;--line:#1e3a2c;
+    --green:#00c37a;--green2:#5fe3a8;--green-deep:#009a57;
+    --amber:#f5c451;--danger:#ff7a6b;
+    --radius:18px;--maxw:1080px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:radial-gradient(1200px 800px at 82% -12%,#10241a 0%,var(--bg) 56%) fixed,var(--bg);
+    color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Segoe UI",system-ui,sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  .deck{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--green),var(--green2));z-index:100;transition:width .15s}
+  .topnav{position:fixed;top:0;right:0;left:0;display:flex;justify-content:space-between;align-items:center;
+    padding:10px 24px;background:rgba(8,18,13,.74);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:90}
+  .topnav .brand{font-size:13px;letter-spacing:.08em;color:var(--ink-dim);font-weight:600;display:flex;align-items:center;gap:9px}
+  .logo{width:20px;height:20px;border-radius:50%;background:conic-gradient(from 200deg,var(--green),var(--green2),var(--green));display:inline-block;box-shadow:0 0 12px rgba(0,195,122,.5)}
+  .topnav .brand b{color:var(--green2)}
+  .topnav .meta{font-size:12px;color:var(--ink-faint)}
+
+  section{padding:92px 0 70px;border-bottom:1px solid rgba(30,58,44,.5)}
+  section:last-child{border-bottom:none}
+
+  .kicker{display:inline-block;font-size:13px;letter-spacing:.16em;color:var(--green);font-weight:700;text-transform:uppercase;
+    margin-bottom:15px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+
+  h1{font-size:52px;line-height:1.16;letter-spacing:-.01em;font-weight:800;margin-bottom:18px}
+  h2{font-size:32px;line-height:1.26;font-weight:800;margin-bottom:14px;letter-spacing:-.01em}
+  h3{font-size:20px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+  p{color:var(--ink-dim);font-size:17px;margin-bottom:13px}
+  .lead{font-size:20px;color:var(--ink)}
+  strong{color:var(--ink);font-weight:700}
+  .g{color:var(--green2)}.amber{color:var(--amber)}.danger{color:var(--danger)}
+
+  /* audience badges */
+  .aud{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  .aud.exec{background:rgba(245,196,81,.14);color:var(--amber);border:1px solid rgba(245,196,81,.3)}
+  .aud.dev{background:rgba(0,195,122,.14);color:var(--green2);border:1px solid rgba(0,195,122,.3)}
+
+  /* cover */
+  .cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:60px}
+  .cover .ey{font-size:15px;color:var(--green2);letter-spacing:.18em;font-weight:700;margin-bottom:10px}
+  .cover .big{font-size:62px;line-height:1.12;font-weight:800}
+  .cover .sub{font-size:20px;color:var(--ink-dim);margin-top:14px;max-width:780px}
+  .cover .pills{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+  .cover .pill{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--ink-dim);display:flex;gap:8px;align-items:center}
+  .cover .pill b{color:var(--green2);font-weight:700}
+  .cover .footer-meta{margin-top:34px;color:var(--ink-faint);font-size:14px}
+  .scroll-hint{margin-top:38px;color:var(--ink-faint);font-size:13px;letter-spacing:.1em;animation:bob 2s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(6px);opacity:1}}
+
+  /* chapter divider */
+  .chap{min-height:78vh;display:flex;flex-direction:column;justify-content:center;position:relative}
+  .chap .cnum{font-size:150px;font-weight:900;line-height:1;color:transparent;-webkit-text-stroke:2px var(--green-deep);opacity:.5}
+  .chap h1{font-size:56px;margin-top:6px}
+  .chap .clist{margin-top:24px;display:flex;flex-direction:column;gap:8px;color:var(--ink-faint);font-size:16px}
+  .chap .clist b{color:var(--green2)}
+
+  .grid{display:grid;gap:18px;margin-top:22px}
+  .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;position:relative;overflow:hidden}
+  .card .num{font-size:13px;font-weight:800;color:var(--green);letter-spacing:.06em}
+  .card p{font-size:15px;margin-bottom:0}
+  .card .ic{font-size:26px;margin-bottom:10px;display:block}
+  .card.hl{border-color:rgba(0,195,122,.45);background:linear-gradient(135deg,var(--card2),var(--card))}
+
+  .stat{display:flex;flex-direction:column;gap:4px}
+  .stat .v{font-size:38px;font-weight:900;background:linear-gradient(120deg,var(--green),var(--green2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:14px;color:var(--ink-dim)}
+
+  ul.clean{list-style:none;margin-top:10px}
+  ul.clean li{position:relative;padding-left:24px;margin-bottom:11px;color:var(--ink-dim);font-size:16px}
+  ul.clean li::before{content:"";position:absolute;left:3px;top:10px;width:8px;height:8px;border-radius:2px;background:var(--green);transform:rotate(45deg)}
+
+  table{width:100%;border-collapse:collapse;margin-top:22px;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+  th,td{padding:14px 16px;text-align:left;font-size:15px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--card2);color:var(--ink);font-weight:700;font-size:13.5px}
+  td{color:var(--ink-dim)}
+  tr:last-child td{border-bottom:none}
+  .tg{color:var(--green2);font-weight:600}
+
+  .vp{background:linear-gradient(135deg,var(--card2),var(--card));border-left:4px solid var(--green);border-radius:14px;padding:20px 24px;margin:18px 0}
+  .vp .who{font-size:12px;letter-spacing:.1em;color:var(--green);font-weight:700;margin-bottom:6px}
+  .vp p{color:var(--ink);font-size:17px;margin-bottom:0}
+
+  .callout{border:1px dashed var(--line);border-radius:14px;padding:18px 22px;margin-top:20px;background:rgba(15,32,24,.6)}
+  .callout p{margin-bottom:0;font-size:16px}
+
+  /* demo placeholder */
+  .demo{border:2px dashed var(--green-deep);border-radius:var(--radius);padding:26px;margin-top:20px;background:repeating-linear-gradient(45deg,rgba(0,195,122,.04),rgba(0,195,122,.04) 12px,transparent 12px,transparent 24px)}
+  .demo .tag{display:inline-flex;align-items:center;gap:7px;background:var(--green);color:#04120b;font-weight:800;font-size:13px;letter-spacing:.06em;padding:4px 14px;border-radius:999px;margin-bottom:12px}
+  .demo h3{color:var(--green2)}
+  .demo .frame{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:#06100b;height:200px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--ink-faint);gap:8px}
+  .demo .frame .ph{font-size:34px;opacity:.5}
+  .demo .pts{margin-top:14px}
+
+  /* divider number watermark */
+  .wm{font-size:120px;font-weight:900;color:rgba(0,195,122,.07);line-height:1;position:absolute;right:0;top:36px;pointer-events:none}
+
+  /* svg figure caption */
+  .fig{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin-top:22px}
+  .fig .cap{font-size:13px;color:var(--ink-faint);margin-top:12px;text-align:center}
+
+  footer.end{padding:70px 0 90px;text-align:center}
+  footer.end .q{font-size:24px;color:var(--ink);font-weight:800;max-width:760px;margin:0 auto 10px}
+
+  @media(max-width:880px){
+    h1,.cover .big,.chap h1{font-size:36px}.chap .cnum{font-size:96px}h2{font-size:25px}
+    .g2,.g3,.g4{grid-template-columns:1fr}.wm{display:none}section{padding:70px 0 54px}
+  }
+  @media print{
+    @page{size:A4 portrait;margin:12mm 10mm}
+    html,body{background:#08120d !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .topnav,.progress,.scroll-hint{display:none !important}
+    *{opacity:1 !important;transform:none !important;animation:none !important;box-shadow:none !important}
+    .deck{max-width:100%}
+    section{padding:0 0 12px !important;border:none !important;page-break-after:always;break-after:page;page-break-inside:avoid;min-height:auto !important}
+    .card,.vp,.demo,table,.fig,.callout{break-inside:avoid;page-break-inside:avoid}
+    .cover{min-height:auto;padding-top:6px !important}.chap{min-height:auto}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="topnav">
+  <div class="brand"><span class="logo"></span>青岛智运科技 · <b>AI Native + AI Coding</b> 培训</div>
+  <div class="meta">企业内训 · 2026</div>
+</div>
+
+<!-- COVER -->
+<section class="cover deck" id="cover">
+  <div class="ey">AI NATIVE × AI CODING · 企业赋能培训</div>
+  <div class="big">从 <span class="g">AI Native</span> 到 <span class="g">AI Coding</span><br>组织与工具的双轮驱动</div>
+  <p class="sub">面向科技公司的实战培训：先讲清「为什么必须 AI 原生」，再讲透「用什么工具落地」，最后用青岛地铁的真实实践，把方法变成可操作的动作。</p>
+  <div class="pills">
+    <div class="pill"><b>01</b> 我对 AI 的第一性理解（开篇）</div>
+    <div class="pill"><b>02</b> AI Native 定义与为什么</div>
+    <div class="pill"><b>03</b> 什么是 AI Coding（工具）</div>
+    <div class="pill"><b>04</b> 如何推进体系落地</div>
+    <div class="pill"><b>05</b> 什么是 FDE · 如何落地</div>
+    <div class="pill"><b>06</b> Agent 开发平台的理解</div>
+    <div class="pill"><b>07</b> 青岛地铁最佳实践</div>
+  </div>
+  <p class="footer-meta">受众：董事长 · 总经理 · 研发负责人 · 一线研发　|　两条线分层：<span class="g">战略认知（面向高层）</span> + <span class="g">工具实操（面向研发）</span></p>
+  <div class="scroll-hint">↓ 向下滚动 / 方向键翻页</div>
+</section>
+
+<!-- ===== CHAPTER 1 (开篇) ===== -->
+<section class="chap deck" id="c0">
+  <div class="cnum">01</div>
+  <div class="kicker">第一章 · 开篇主讲</div>
+  <h1>我对 AI 的<br>第一性理解</h1>
+  <div class="clist">
+    <span><b>1.1</b>　一个框架：三个差（信息差 · 认知差 · 执行差）</span>
+    <span><b>1.2</b>　两个隐喻：AI 是镜子，也是放大器</span>
+    <span><b>1.3</b>　一条判断：成败 ≠ 技术，= 关键人</span>
+  </div>
+  <p style="color:var(--ink-faint);margin-top:16px;font-size:14px">不谈技术栈，不谈大模型参数量——把三年沉淀出的「一个框架、两个隐喻、一条判断」交给你。</p>
+</section>
+
+<section class="deck" id="c0-gap">
+  <div class="kicker">1.1 · 一个框架</div>
+  <h2>AI 的价值，本质是逐层压缩三个「差」<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <p>不谈技术栈，先看 AI 到底在解决什么。三年下来我把它压成一个框架——AI 的价值，就是逐层压缩组织里的三个差。</p>
+  <div class="grid g3">
+    <div class="card">
+      <span class="num">01 / GAP</span>
+      <h3 style="margin-top:8px">信息差 · Information Gap</h3>
+      <p><strong>知识在哪儿、谁掌握、何时能被取用。</strong>过去十年我们解决了「数据上云」，却没解决「知识可用」。AI 第一层价值：把沉在文档、工单、老师傅脑子里的隐性知识，变成可随时调用的显性资产。</p>
+      <p style="margin-top:10px;color:var(--green2);font-size:14px">→ AI 压缩：RAG / 知识图谱 / 语义检索</p>
+    </div>
+    <div class="card">
+      <span class="num">02 / GAP</span>
+      <h3 style="margin-top:8px">认知差 · Cognition Gap</h3>
+      <p><strong>同样的信息，不同的人读出不同的判断。</strong>专家与新人的差距，从来不是记得多少，而是能从一个异常数据推到几层。AI 第二层价值：把「资深专家的推理过程」固化，让任何值班员凌晨三点也能拿到专家级结论。</p>
+      <p style="margin-top:10px;color:var(--green2);font-size:14px">→ AI 压缩：推理链 / 多智能体 / 因果模型</p>
+    </div>
+    <div class="card">
+      <span class="num">03 / GAP</span>
+      <h3 style="margin-top:8px">执行差 · Execution Gap</h3>
+      <p><strong>知道、想到、做到——中间都隔着深渊。</strong>很多所谓「AI 落地难」，本质是组织没把决策翻译成动作的能力。AI 第三层价值：在决策与动作之间，加一层可审计、可回放、可改进的自动化管道。</p>
+      <p style="margin-top:10px;color:var(--green2);font-size:14px">→ AI 压缩：Agent / 工作流 / 人机回环</p>
+    </div>
+  </div>
+</section>
+
+<section class="deck" id="c0-mirror">
+  <div class="kicker">1.2 · 两个隐喻</div>
+  <h2>AI 不会凭空创造什么——它是镜子，也是放大器<span class="aud exec">面向高层</span></h2>
+  <div class="grid g2">
+    <div class="card"><span class="ic">🪞</span><h3>镜子</h3><p>你的流程是怎样的、数据是怎样的、组织协同是怎样的——AI 会原原本本照出来。<strong>流程混乱的单位，上 AI 之后，混乱会被照得更清楚。</strong></p></div>
+    <div class="card"><span class="ic">🔊</span><h3>放大器</h3><p>AI 放大一切——放大好的能力，也放大坏的习惯。管理精细，AI 会让你成为行业标杆；管理粗放，AI 会让问题以<strong class="danger">十倍速度</strong>暴露。</p></div>
+  </div>
+  <div class="vp"><div class="who">一个公式</div><p style="font-family:'SFMono-Regular',Consolas,monospace;font-size:22px;color:var(--green2);font-weight:700">AI_Outcome = Organization_Capability × 10</p></div>
+</section>
+
+<section class="deck" id="c0-people">
+  <div class="kicker">1.3 · 一条判断</div>
+  <h2>AI 项目的成败 ≠ 技术，= 关键人<span class="aud exec">面向高层</span></h2>
+  <p>三年里见过太多 AI 项目，技术选型差不多、投入差不多、团队水平也差不多——能拉开量级差距的，永远是下面三个「关键人」是否到位，以及他们之间是否在同一张桌子上。</p>
+  <div class="grid g3">
+    <div class="card"><span class="num">THE SPONSOR</span><h3 style="margin-top:8px">一号位</h3><p>不是挂名，是真愿意为 AI 项目让路、让资源、让容错空间。决定项目「敢不敢做真问题」，还是永远做「好看的 Demo」。</p><p style="margin-top:10px;color:var(--danger);font-size:14px">⚠ 若缺位：项目沦为应付考核</p></div>
+    <div class="card"><span class="num">THE DOMAIN EXPERT</span><h3 style="margin-top:8px">业务核心</h3><p>真正在岗位上解决过问题的人，掌握买不来的「潜规则」与「踩坑知识」。决定 AI 能不能「触达真需求」。</p><p style="margin-top:10px;color:var(--danger);font-size:14px">⚠ 若缺位：AI 解决的是假问题</p></div>
+    <div class="card"><span class="num">THE AI ARCHITECT</span><h3 style="margin-top:8px">AI 操盘手</h3><p>既懂技术边界、又懂业务机理的「翻译层」，把一号位的战略与专家的经验，翻译成可交付系统。决定项目能不能「落得下来」。</p><p style="margin-top:10px;color:var(--danger);font-size:14px">⚠ 若缺位：技术与业务两层皮</p></div>
+  </div>
+  <div class="vp"><div class="who">我的第一句话</div><p>不要先问「该选哪个大模型」，先问「这三个关键人是不是在同一张桌子上」。<strong class="g">模型可以换、技术可以迭代，但关键人缺一个，AI 战略就是空的。</strong></p></div>
+</section>
+
+<!-- ===== CHAPTER 2 (原一) ===== -->
+<section class="chap deck" id="c1">
+  <div class="cnum">02</div>
+  <div class="kicker">第二章</div>
+  <h1>AI Native：<br>是什么，为什么必须做</h1>
+  <div class="clist">
+    <span><b>2.1</b>　AI Native 的定义——五条北极星</span>
+    <span><b>2.2</b>　为什么推行：一个字「快」</span>
+    <span><b>2.3</b>　产出差距：到底差多少</span>
+    <span><b>2.4</b>　不做的代价：护城河正在消失</span>
+  </div>
+</section>
+
+<section class="deck" id="c1-def">
+  <div class="kicker">2.1 · 定义</div>
+  <h2>AI Native 不是「装了 AI 的公司」<span class="aud exec">面向高层</span></h2>
+  <div class="vp"><div class="who">一句话定义</div><p>AI Native 是 <strong class="g">AI 像血液一样流经企业每个环节、环环相扣</strong>的组织——AI 是循环系统，不是某个部门的工具。具体看五条：</p></div>
+  <div class="grid g3">
+    <div class="card"><span class="num">01 · 决策大脑</span><h3 style="margin-top:8px">AI 拥有完整企业上下文</h3><p>AI 掌握全量上下文，成为管理者的辅助决策大脑，而非孤立问答工具。</p></div>
+    <div class="card"><span class="num">02 · 经验飞轮</span><h3 style="margin-top:8px">经验实时沉淀、能力进化</h3><p>员工经验在组织内实时沉淀，AI 的决策与执行能力越用越强。</p></div>
+    <div class="card"><span class="num">03 · 零信息差</span><h3 style="margin-top:8px">不靠人传人传递信息</h3><p>信息流转不再依赖人沟通，人与人之间不存在信息差，损耗大幅降低。</p></div>
+    <div class="card"><span class="num">04 · AI 为主</span><h3 style="margin-top:8px">屏幕上的工作 AI 主、人辅</h3><p>AI 为主、人为辅；人聚焦判断、授权与例外处理。</p></div>
+    <div class="card hl" style="grid-column:span 2"><span class="num">05 · 如血液</span><h3 style="margin-top:8px">AI 覆盖所有环节、环环相扣</h3><p>AI 如同人体血液，覆盖企业运转的所有环节并环环相扣——这是前四条的总纲。</p></div>
+  </div>
+</section>
+
+<section class="deck" id="c1-why">
+  <div class="kicker">2.2 · 为什么</div>
+  <h2>本质：用算力换时间，核心就一个字「快」<span class="aud exec">面向高层</span></h2>
+  <div class="grid g3">
+    <div class="stat card"><span class="v">6 月 → 1 周</span><span class="l">开发周期量级压缩</span></div>
+    <div class="stat card"><span class="v">25% → 95%</span><span class="l">任务成功率跃迁</span></div>
+    <div class="stat card"><span class="v">≈ 0</span><span class="l">优质工具的边际成本</span></div>
+  </div>
+  <p style="margin-top:20px">AI 时代的最大成本是「沉默成本」——时间与机会。过去用「人月」衡量投入，现在用「<strong class="g">算力 × 速度</strong>」衡量产出。<strong>慢，就是最贵的成本</strong>，它不写在财报里，却决定生死。这就是必须推行 AI Native 的根本原因。</p>
+</section>
+
+<section class="deck" id="c1-gap">
+  <div class="kicker">2.3 · 产出差距</div>
+  <h2>AI Native 组织 vs 传统公司，差多少？<span class="aud exec">面向高层</span></h2>
+  <div class="fig">
+    <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+      <defs><linearGradient id="bar" x1="0" x2="1"><stop offset="0" stop-color="#009a57"/><stop offset="1" stop-color="#5fe3a8"/></linearGradient></defs>
+      <!-- baseline -->
+      <line x1="210" y1="20" x2="210" y2="240" stroke="#f5c451" stroke-width="2" stroke-dasharray="5 5"/>
+      <text x="214" y="16" fill="#f5c451" font-size="13" font-family="sans-serif">传统基线 1×</text>
+      <!-- rows -->
+      <g font-family="sans-serif">
+        <text x="20" y="52" fill="#a3c2b3" font-size="15">个人/落地层</text>
+        <rect x="180" y="38" width="40" height="26" rx="6" fill="#3f5a4d"/>
+        <text x="230" y="56" fill="#e9f6ef" font-size="14" font-weight="700">1.1–1.3×</text>
+
+        <text x="20" y="100" fill="#a3c2b3" font-size="15">组织迭代速度</text>
+        <rect x="180" y="86" width="120" height="26" rx="6" fill="url(#bar)"/>
+        <text x="312" y="104" fill="#e9f6ef" font-size="14" font-weight="700">2–3×</text>
+
+        <text x="20" y="148" fill="#a3c2b3" font-size="15">组织人效</text>
+        <rect x="180" y="134" width="430" height="26" rx="6" fill="url(#bar)"/>
+        <text x="622" y="152" fill="#e9f6ef" font-size="14" font-weight="700">5–10×</text>
+
+        <text x="20" y="196" fill="#a3c2b3" font-size="15">标杆/上限</text>
+        <rect x="180" y="182" width="640" height="26" rx="6" fill="url(#bar)"/>
+        <text x="828" y="200" fill="#04120b" font-size="14" font-weight="800" text-anchor="end">10×+</text>
+      </g>
+      <text x="180" y="234" fill="#6f9180" font-size="12" font-family="sans-serif">尺度：满格 ≈ 10×</text>
+    </svg>
+    <div class="cap">数据来源：Faros AI、METR 随机对照实验、谷歌官方口径、AI-Native 公司结构案例等公开研究（2025–2026），区间为综合估计。</div>
+  </div>
+  <div class="callout"><p><strong>关键悖论</strong>：个人提速 ≠ 组织提产。AI 普及常伴随评审 +91%、bug +9%。差距能否从「10–30% 个人提速」放大成「2–3× 组织提产」，取决于<strong class="g">思想与组织</strong>——这正是第三章要解决的。</p></div>
+</section>
+
+<section class="deck" id="c1-cost">
+  <div class="kicker">2.4 · 不做的代价</div>
+  <h2>大厂正在向上蚕食，产品护城河在消失<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="grid g2">
+    <div>
+      <ul class="clean">
+        <li>大模型每几个月迭代，今天引以为傲的智能体/工具，<strong class="danger">几个月后可能被原生能力覆盖</strong></li>
+        <li>「做了一个 AI 工具」本身不再是护城河</li>
+        <li>护城河转移到：<strong class="g">行业 Know-how、数据、客户关系、合规理解</strong></li>
+      </ul>
+    </div>
+    <div class="card hl">
+      <span class="ic">🧱</span>
+      <h3>反共识：AI 也替代不了的</h3>
+      <p>大厂模型很强，但读不懂企业复杂的利益链与合规风险。<strong>5% 陷阱</strong>：95% 准确率意味着每 20 次有 1 次重大失误——这恰是行业玩家扎根的价值锚点。</p>
+    </div>
+  </div>
+  <div class="callout"><p>一句话收口：<strong class="g">AI Native 不是选择题，是生存题。</strong>不主动重构组织与工具，就会被时代和大厂一起拍在沙滩上。</p></div>
+</section>
+
+<!-- ===== CHAPTER 2 ===== -->
+<section class="chap deck" id="c2">
+  <div class="cnum">03</div>
+  <div class="kicker">第三章</div>
+  <h1>到底什么是<br>AI Coding（工具）</h1>
+  <div class="clist">
+    <span><b>3.1</b>　演进：从补全到自主智能体</span>
+    <span><b>3.2</b>　三种范式 · 三个代表工具</span>
+    <span><b>3.3</b>　核心能力维度怎么看</span>
+    <span><b>3.4</b>　青岛地铁视角：三位一体 × Harness Coding</span>
+    <span><b>3.5</b>　怎么选、怎么组合用</span>
+  </div>
+  <p style="color:var(--ink-faint);margin-top:18px;font-size:14px">※ 本章基于 2026 前沿信息总结，后续与你深度讨论完善。</p>
+</section>
+
+<section class="deck" id="c2-evo">
+  <div class="kicker">3.1 · 演进</div>
+  <h2>AI Coding 的三级跳<span class="aud dev">面向研发</span></h2>
+  <div class="fig">
+    <svg viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="sans-serif">
+      <line x1="60" y1="100" x2="840" y2="100" stroke="#1e3a2c" stroke-width="3"/>
+      <g>
+        <circle cx="150" cy="100" r="11" fill="#3f5a4d"/>
+        <text x="150" y="60" fill="#a3c2b3" font-size="15" text-anchor="middle" font-weight="700">代码补全</text>
+        <text x="150" y="138" fill="#6f9180" font-size="12" text-anchor="middle">Tab 补全 · 行级建议</text>
+      </g>
+      <g>
+        <circle cx="430" cy="100" r="13" fill="#009a57"/>
+        <text x="430" y="60" fill="#cdeede" font-size="15" text-anchor="middle" font-weight="700">结对编程</text>
+        <text x="430" y="138" fill="#6f9180" font-size="12" text-anchor="middle">对话式 · 函数/文件级协助</text>
+      </g>
+      <g>
+        <circle cx="740" cy="100" r="16" fill="#00c37a"/>
+        <text x="740" y="58" fill="#5fe3a8" font-size="16" text-anchor="middle" font-weight="800">自主智能体</text>
+        <text x="740" y="138" fill="#a3c2b3" font-size="12" text-anchor="middle">读全库 · 多文件 · 自主改/测/交付</text>
+      </g>
+      <polygon points="838,100 824,93 824,107" fill="#00c37a"/>
+    </svg>
+    <div class="cap">能力跃迁：从「帮你打字」到「替你完成一个任务」。2026 年的主战场已是最右端的 Agentic（自主智能体）。</div>
+  </div>
+  <p style="margin-top:18px">一句话理解：AI Coding 工具正从「<strong>更快地写代码</strong>」进化为「<strong class="g">把一个完整开发任务交给它自主完成</strong>」——它能读懂整个代码库，自己规划、写、调试、跑测试，甚至提交。</p>
+</section>
+
+<section class="deck" id="c2-tools">
+  <div class="kicker">3.2 · 三种范式</div>
+  <h2>三个代表工具，三种哲学<span class="aud dev">面向研发</span></h2>
+  <div class="grid g3">
+    <div class="card hl">
+      <span class="ic">🤖</span><span class="num">Anthropic</span>
+      <h3 style="margin-top:6px">Claude Code</h3>
+      <p><strong>自主编码智能体</strong>。运行在终端/IDE/桌面/Slack，读懂整个代码库，自主完成多步骤、多文件的写、改、调、交付。能力天花板最高。</p>
+    </div>
+    <div class="card">
+      <span class="ic">🧩</span><span class="num">Anysphere</span>
+      <h3 style="margin-top:6px">Cursor</h3>
+      <p><strong>AI 原生 IDE</strong>。AI 融入编辑器每一层，日常编码体验最顺手，适合「边写边问」。</p>
+    </div>
+    <div class="card">
+      <span class="ic">🐙</span><span class="num">GitHub / 微软</span>
+      <h3 style="margin-top:6px">GitHub Copilot</h3>
+      <p><strong>AI 结对程序员</strong>。覆盖面最广、与 GitHub 深度集成，企业 SSO/审计最成熟，有真正可用的免费档。</p>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:14px;color:var(--ink-faint)">其他活跃工具：OpenAI Codex、Windsurf、Kiro、Antigravity 等，整体仍在快速洗牌。</p>
+</section>
+
+<section class="deck" id="c2-cap">
+  <div class="kicker">3.3 · 能力维度</div>
+  <h2>选工具，看这几把尺子<span class="aud dev">面向研发</span></h2>
+  <table>
+    <thead><tr><th style="width:22%">维度</th><th style="width:30%">说明</th><th style="width:48%">为什么重要</th></tr></thead>
+    <tbody>
+      <tr><td><strong>上下文窗口</strong></td><td class="tg">百万级 token、整库理解</td><td>能否不切块地读懂整个项目——决定它「懂不懂你的系统」。Claude 可单次处理约百万 token（约 2.5–3 万行代码）。</td></tr>
+      <tr><td><strong>自主程度</strong></td><td class="tg">补全 → 对话 → 自主智能体</td><td>能否独立完成多文件、跨步骤任务，而不只是给片段建议。</td></tr>
+      <tr><td><strong>工作位置</strong></td><td class="tg">终端 / IDE / 桌面 / Slack</td><td>是否嵌入你真实的工作流，而非又一个要切换的窗口。</td></tr>
+      <tr><td><strong>企业治理</strong></td><td class="tg">SSO、审计、权限、合规</td><td>能否在组织内安全规模化——尤其对地铁这类强合规场景。</td></tr>
+      <tr><td><strong>成本档位</strong></td><td class="tg">$10 / $20 / $20–200 月</td><td>从入门到高能力上限，按团队需要分层投入。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="deck" id="c2-map">
+  <div class="kicker">3.4 · 青岛地铁视角</div>
+  <h2>三位一体 × Harness Coding：组织如何映射到 AI 原生开发<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <p>把青岛地铁的「三位一体」管理框架，对应到 AI 原生开发（Harness Coding）的工程要素——这就是把<strong class="g">组织语言翻译成工具语言</strong>。三位不是被工单流穿过，而是各司其职。</p>
+  <div class="fig">
+    <svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6f9180" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <text x="170" y="28" text-anchor="middle" fill="#cdeede" font-size="15" font-weight="700">青岛地铁 · 三位一体</text>
+      <text x="590" y="28" text-anchor="middle" fill="#5fe3a8" font-size="15" font-weight="700">Harness Coding（AI 原生开发）</text>
+
+      <text x="380" y="44" text-anchor="middle" fill="#6f9180" font-size="12">方向层</text>
+      <rect x="40" y="50" width="260" height="62" rx="10" fill="#0f2a20" stroke="#00c37a"/>
+      <text x="170" y="78" text-anchor="middle" fill="#cdeede" font-size="15" font-weight="700">目标体系</text>
+      <text x="170" y="99" text-anchor="middle" fill="#5fe3a8" font-size="12">定义可验收的终态</text>
+      <rect x="460" y="50" width="260" height="62" rx="10" fill="#0f2a20" stroke="#00c37a"/>
+      <text x="590" y="78" text-anchor="middle" fill="#cdeede" font-size="15" font-weight="700">目标设定</text>
+      <text x="590" y="99" text-anchor="middle" fill="#5fe3a8" font-size="12">535 场景验收标准</text>
+      <line x1="300" y1="81" x2="456" y2="81" stroke="#6f9180" stroke-width="1.5" marker-end="url(#ar)"/>
+
+      <text x="380" y="132" text-anchor="middle" fill="#6f9180" font-size="12">保障层</text>
+      <rect x="40" y="138" width="260" height="74" rx="10" fill="#0e2233" stroke="#3da9fc"/>
+      <text x="170" y="163" text-anchor="middle" fill="#cfe8ff" font-size="15" font-weight="700">保障体系</text>
+      <text x="170" y="183" text-anchor="middle" fill="#9bd0ff" font-size="12">安全边界 + 资源供给</text>
+      <text x="170" y="201" text-anchor="middle" fill="#9bd0ff" font-size="12">不出事，有弹药</text>
+      <rect x="460" y="138" width="260" height="74" rx="10" fill="#0e2233" stroke="#3da9fc"/>
+      <text x="590" y="169" text-anchor="middle" fill="#cfe8ff" font-size="14" font-weight="700">资源供给</text>
+      <text x="590" y="191" text-anchor="middle" fill="#9bd0ff" font-size="12">数据 · 算力 · 场景 · 专家团队</text>
+      <line x1="300" y1="175" x2="456" y2="175" stroke="#6f9180" stroke-width="1.5" marker-end="url(#ar)"/>
+
+      <text x="380" y="234" text-anchor="middle" fill="#6f9180" font-size="12">执行层 · 班组建设</text>
+      <rect x="40" y="240" width="260" height="116" rx="10" fill="#2a2410" stroke="#f5c451"/>
+      <text x="170" y="280" text-anchor="middle" fill="#fbeec0" font-size="15" font-weight="700">班组建设</text>
+      <text x="170" y="302" text-anchor="middle" fill="#f5d98a" font-size="12">组织执行单元</text>
+      <text x="170" y="320" text-anchor="middle" fill="#f5d98a" font-size="12">谁来打，怎么编队</text>
+      <rect x="460" y="240" width="260" height="52" rx="10" fill="#2a2410" stroke="#f5c451"/>
+      <text x="590" y="262" text-anchor="middle" fill="#fbeec0" font-size="14" font-weight="700">约束文件</text>
+      <text x="590" y="280" text-anchor="middle" fill="#f5d98a" font-size="11.5">CLAUDE.md · 规则与边界</text>
+      <rect x="460" y="304" width="260" height="52" rx="10" fill="#2a2410" stroke="#f5c451"/>
+      <text x="590" y="326" text-anchor="middle" fill="#fbeec0" font-size="14" font-weight="700">agent 编队 + FDE</text>
+      <text x="590" y="344" text-anchor="middle" fill="#f5d98a" font-size="11.5">SKILL.md 域专家 · subgraph 编排</text>
+      <line x1="300" y1="298" x2="456" y2="266" stroke="#6f9180" stroke-width="1.5" marker-end="url(#ar)"/>
+      <line x1="300" y1="298" x2="456" y2="330" stroke="#6f9180" stroke-width="1.5" marker-end="url(#ar)"/>
+
+      <rect x="40" y="384" width="680" height="74" rx="12" fill="#11201a" stroke="#1e3a2c"/>
+      <text x="380" y="408" text-anchor="middle" fill="#e9f6ef" font-size="14" font-weight="700">场景需求（工单）</text>
+      <text x="380" y="428" text-anchor="middle" fill="#a3c2b3" font-size="12">不进三位，而是贯穿三位的流转对象</text>
+      <text x="170" y="448" text-anchor="middle" fill="#6f9180" font-size="11.5">目标体系 定验收</text>
+      <text x="380" y="448" text-anchor="middle" fill="#6f9180" font-size="11.5">保障体系 供资源</text>
+      <text x="590" y="448" text-anchor="middle" fill="#6f9180" font-size="11.5">班组建设 来执行</text>
+    </svg>
+    <div class="cap">映射关系：目标体系↔目标设定；保障体系↔资源供给（数据·算力·场景·专家团队）；班组建设↔约束文件 + agent 编队/FDE；场景需求作为工单贯穿三位。</div>
+  </div>
+</section>
+
+<section class="deck" id="c2-combo">
+  <div class="kicker">3.5 · 选型与组合</div>
+  <h2>真实团队怎么用：不是二选一，是组合拳<span class="aud dev">面向研发</span></h2>
+  <div class="grid g2">
+    <div class="card"><span class="ic">⚡</span><h3>最常见的组合</h3><p><strong class="g">Cursor 做日常编辑 + Claude Code 啃复杂任务</strong>；或 IDE 里用 Copilot + 终端里用 Claude Code。各取所长。</p></div>
+    <div class="card"><span class="ic">🎯</span><h3>给团队的建议</h3><p>入门尝鲜用 Copilot；追求 IDE 体验用 Cursor；要「自主完成整块工作、深度理解代码库」用 Claude Code。</p></div>
+  </div>
+  <div class="vp"><div class="who">本章小结</div><p>AI Coding 工具的本质，是把「写代码」变成「<strong class="g">指挥 AI 完成开发任务</strong>」。工具会持续洗牌，但方向确定无疑：<strong>越自主、越懂全局，越值钱</strong>。具体选型与落地，我们回头深度展开。</p></div>
+</section>
+
+<!-- ===== CHAPTER 3 ===== -->
+<section class="chap deck" id="c3">
+  <div class="cnum">04</div>
+  <div class="kicker">第四章</div>
+  <h1>如何推进<br>AI Native 体系落地</h1>
+  <div class="clist">
+    <span><b>4.1</b>　三层框架：思想 · 组织 · 工具</span>
+    <span><b>4.2</b>　思想：头部 20–30% 先行者飞轮</span>
+    <span><b>4.3</b>　组织：建立快迭机制</span>
+    <span><b>4.4</b>　工具落地四步法 + 终局形态</span>
+  </div>
+</section>
+
+<section class="deck" id="c3-layers">
+  <div class="kicker">4.1 · 三层框架</div>
+  <h2>落地最终是思想问题，三层同时动<span class="aud exec">面向高层</span></h2>
+  <div class="fig">
+    <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="sans-serif">
+      <polygon points="450,30 640,120 260,120" fill="#00c37a"/>
+      <polygon points="260,128 640,128 740,210 160,210" fill="#13291e" stroke="#1e3a2c"/>
+      <polygon points="160,218 740,218 820,270 80,270" fill="#0f2018" stroke="#1e3a2c"/>
+      <text x="450" y="95" fill="#04120b" font-size="17" font-weight="800" text-anchor="middle">思想 / 心智</text>
+      <text x="450" y="178" fill="#cdeede" font-size="16" font-weight="700" text-anchor="middle">组织 / 机制</text>
+      <text x="450" y="252" fill="#a3c2b3" font-size="15" font-weight="700" text-anchor="middle">工具 / 产品</text>
+      <text x="660" y="80" fill="#5fe3a8" font-size="13">最难·最决定成败</text>
+      <text x="760" y="180" fill="#6f9180" font-size="13">授权·容错·快迭</text>
+      <text x="828" y="252" fill="#6f9180" font-size="13" text-anchor="end">易上手·壁垒最低</text>
+    </svg>
+    <div class="cap">工具是表层、看得见但壁垒最低；组织是中层；思想是底层、最难也最决定成败。</div>
+  </div>
+</section>
+
+<section class="deck" id="c3-mind">
+  <div class="kicker">4.2 · 思想</div>
+  <h2>靠头部效应：20–30% 先行者拉动全员<span class="aud exec">面向高层</span></h2>
+  <div class="grid g2">
+    <div>
+      <ul class="clean">
+        <li>不追求一次性全员转型，先点燃<strong class="g">关键少数</strong></li>
+        <li>给先行者真实的授权、资源与容错空间</li>
+        <li>把成果做成可见标杆，形成示范与势能</li>
+        <li>先行者不是「最懂技术的人」，而是<strong>最愿意用 AI 重新想问题的人</strong></li>
+      </ul>
+    </div>
+    <div class="card hl">
+      <span class="ic">🚀</span><h3>先行者飞轮</h3>
+      <p>选先行者 → 给授权与算力 → 做出快成果 → 树立标杆 → 拉动更多人 → 心智转变 → 组织 AI Native 化。</p>
+    </div>
+  </div>
+</section>
+
+<section class="deck" id="c3-org">
+  <div class="kicker">4.3 · 组织</div>
+  <h2>建立快迭机制：区分核心与非核心链路<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="grid g3">
+    <div class="card"><span class="num">机制一</span><h3 style="margin-top:8px">核心/非核心分流</h3><p>内部工具与非安全场景大胆快迭、容忍非核心 bug；安全核心链路严守红线。</p></div>
+    <div class="card"><span class="num">机制二</span><h3 style="margin-top:8px">周度指标驱动</h3><p>每周拆解指标，开发者依据反馈自主优化，而非层层审批。</p></div>
+    <div class="card"><span class="num">机制三</span><h3 style="margin-top:8px">小队端到端授权</h3><p>先行者小队端到端负责，绕开冗长流程，做出来再推广。</p></div>
+  </div>
+  <div class="callout"><p>还要<strong class="g">敢做减法</strong>：主动盘点会被大厂覆盖的产品/能力，提前把精力转向行业 Know-how 与高价值场景。</p></div>
+</section>
+
+<section class="deck" id="c3-tool">
+  <div class="kicker">4.4 · 工具落地 + 终局</div>
+  <h2>AI Coding 落地四步法<span class="aud dev">面向研发</span></h2>
+  <div class="grid g4">
+    <div class="card"><span class="num">① 选型</span><h3 style="margin-top:6px">小范围选工具</h3><p>结合场景与合规，先锁定 1–2 个工具。</p></div>
+    <div class="card"><span class="num">② 试点</span><h3 style="margin-top:6px">先行者小队试</h3><p>挑高频痛点场景，端到端跑通。</p></div>
+    <div class="card"><span class="num">③ 标杆</span><h3 style="margin-top:6px">做出可见成果</h3><p>量化效率提升，沉淀最佳实践。</p></div>
+    <div class="card"><span class="num">④ 推广</span><h3 style="margin-top:6px">复制到更多团队</h3><p>把工具、规范、提示词资产化复用。</p></div>
+  </div>
+  <div class="vp"><div class="who">终局形态</div><p>当 AI 像血液般贯通全流程，营销·研发·交付的部门墙会消融，演变为 <strong class="g">「FDE 工程师 + AI Native 体系 + AI Native 工具」</strong>——一个小队，端到端用极低成本、极高效率完成获单—研发—交付。</p></div>
+</section>
+
+<!-- ===== CHAPTER 4 ===== -->
+<!-- ===== CHAPTER 5 (FDE) ===== -->
+<section class="chap deck" id="c5fde">
+  <div class="cnum">05</div>
+  <div class="kicker">第五章</div>
+  <h1>什么是 FDE，<br>以及如何推进 FDE 落地</h1>
+  <div class="clist">
+    <span><b>5.1</b>　FDE 是什么：AI 时代的最小作战单元</span>
+    <span><b>5.2</b>　为什么 AI 时代需要 FDE</span>
+    <span><b>5.3</b>　FDE 能力画像</span>
+    <span><b>5.4</b>　FDE 落地四步法</span>
+  </div>
+</section>
+
+<section class="deck" id="c5-def">
+  <div class="kicker">5.1 · 定义</div>
+  <h2>FDE：前线部署工程师，营销·研发·交付一体的执行单元<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="vp"><div class="who">一句话定义</div><p>FDE（Forward-Deployed Engineer · 前线部署工程师）不是一个传统岗位，而是 AI 时代「<strong class="g">营销·研发·交付一体化</strong>」的执行单元——一个既扎根业务现场、又能直接驾驭 AI 工具端到端交付的人（或小队）。</p></div>
+  <div class="fig">
+    <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+      <defs><marker id="af" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6f9180" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <text x="40" y="34" fill="#6f9180" font-size="13">传统：分工交付 · 信息层层传递</text>
+      <rect x="40" y="48" width="180" height="46" rx="10" fill="#13291e" stroke="#3f5a4d"/><text x="130" y="76" text-anchor="middle" fill="#a3c2b3" font-size="14">售前 / 获单</text>
+      <rect x="290" y="48" width="180" height="46" rx="10" fill="#13291e" stroke="#3f5a4d"/><text x="380" y="76" text-anchor="middle" fill="#a3c2b3" font-size="14">研发</text>
+      <rect x="540" y="48" width="180" height="46" rx="10" fill="#13291e" stroke="#3f5a4d"/><text x="630" y="76" text-anchor="middle" fill="#a3c2b3" font-size="14">交付</text>
+      <line x1="222" y1="71" x2="288" y2="71" stroke="#6f9180" stroke-width="1.5" marker-end="url(#af)"/>
+      <line x1="472" y1="71" x2="538" y2="71" stroke="#6f9180" stroke-width="1.5" marker-end="url(#af)"/>
+      <text x="255" y="42" text-anchor="middle" fill="#ff7a6b" font-size="11">信息差</text>
+      <text x="505" y="42" text-anchor="middle" fill="#ff7a6b" font-size="11">信息差</text>
+      <text x="40" y="150" fill="#5fe3a8" font-size="13">FDE：端到端一体 · 零信息差</text>
+      <rect x="40" y="162" width="680" height="52" rx="12" fill="#0f2a20" stroke="#00c37a"/>
+      <text x="380" y="184" text-anchor="middle" fill="#cdeede" font-size="15" font-weight="700">FDE 小队：获单 → 研发 → 交付</text>
+      <text x="380" y="203" text-anchor="middle" fill="#5fe3a8" font-size="12">同一人 / 同一小队端到端完成</text>
+    </svg>
+    <div class="cap">从「分工交付、信息层层传递」到「一人/一队端到端、零信息差」。</div>
+  </div>
+  <div class="callout"><p>用一个等式记住它：<strong class="g">FDE = 业务现场理解 × AI 工具驾驭 × 端到端交付权</strong>。三者缺一，都不是真正的 FDE。</p></div>
+</section>
+
+<section class="deck" id="c5-why">
+  <div class="kicker">5.2 · 为什么</div>
+  <h2>为什么 AI 时代必须有 FDE<span class="aud exec">面向高层</span></h2>
+  <div class="grid g2">
+    <div class="card"><span class="ic">🧱</span><h3>部门墙在消融</h3><p>呼应终局形态：当 AI 像血液般贯通全流程，营销·研发·交付的边界自然消失，FDE 正是这堵墙倒下后的新执行形态。</p></div>
+    <div class="card"><span class="ic">🔗</span><h3>消灭信息差</h3><p>FDE 把传统的「翻译层 + 执行层」合一，需求不再层层转述，从源头到交付零失真——直接呼应第一章的「信息差」。</p></div>
+    <div class="card"><span class="ic">⚡</span><h3>极低成本、极高效率</h3><p>一个 FDE 小队，端到端完成获单—研发—交付，用过去几十人团队的零头，做出更快的产出。</p></div>
+    <div class="card"><span class="ic">🛡️</span><h3>破解快慢矛盾</h3><p>面对审慎的行业客户，FDE 让「我们自己快、把成果端给客户」成为可能，不被客户决策节奏拖死。</p></div>
+  </div>
+</section>
+
+<section class="deck" id="c5-profile">
+  <div class="kicker">5.3 · 能力画像</div>
+  <h2>FDE 长什么样：四种能力叠加<span class="aud dev">面向研发</span></h2>
+  <div class="grid g4">
+    <div class="card"><span class="num">01</span><h3 style="margin-top:6px">业务机理</h3><p>扎根现场，懂买不来的「潜规则」与「踩坑知识」。</p></div>
+    <div class="card"><span class="num">02</span><h3 style="margin-top:6px">AI 工具驾驭</h3><p>熟练使用 AI Coding 工具（Claude Code 等），指挥 AI 完成开发。</p></div>
+    <div class="card"><span class="num">03</span><h3 style="margin-top:6px">端到端交付</h3><p>从需求到上线全链路负责，而非只管一段。</p></div>
+    <div class="card"><span class="num">04</span><h3 style="margin-top:6px">判断与把关</h3><p>对 AI 产出做质量把关、处理例外，守住红线。</p></div>
+  </div>
+  <div class="vp"><div class="who">选人关键</div><p>FDE 不是「最懂技术的人」，而是<strong class="g">最愿意用 AI 重新想问题、又扎根业务现场的人</strong>——往往就藏在那 20–30% 的头部先行者里。</p></div>
+</section>
+
+<section class="deck" id="c5-land">
+  <div class="kicker">5.4 · 落地四步法</div>
+  <h2>如何推进 FDE 落地<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="grid g4">
+    <div class="card"><span class="num">① 选人</span><h3 style="margin-top:6px">挑 FDE 种子</h3><p>从 20–30% 头部先行者中选出第一批，给真实授权与容错空间。</p></div>
+    <div class="card"><span class="num">② 配装备</span><h3 style="margin-top:6px">体系 + 工具</h3><p>配齐 AI Native 体系与工具：约束文件(CLAUDE.md)、域专家(SKILL.md)、agent 编队。</p></div>
+    <div class="card"><span class="num">③ 授权</span><h3 style="margin-top:6px">端到端小队</h3><p>小队端到端负责，绕开层层审批；核心/非核心链路分流。</p></div>
+    <div class="card"><span class="num">④ 闭环</span><h3 style="margin-top:6px">标杆与复制</h3><p>周度指标驱动，做出标杆，再复制扩编更多 FDE 小队。</p></div>
+  </div>
+  <div class="fig">
+    <svg viewBox="0 0 760 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+      <rect x="30" y="28" width="200" height="40" rx="10" fill="#2a2410" stroke="#f5c451"/><text x="130" y="53" text-anchor="middle" fill="#fbeec0" font-size="13" font-weight="700">FDE 工程师</text>
+      <rect x="30" y="76" width="200" height="40" rx="10" fill="#2a2410" stroke="#f5c451"/><text x="130" y="101" text-anchor="middle" fill="#fbeec0" font-size="13" font-weight="700">agent 编队</text>
+      <rect x="30" y="124" width="200" height="36" rx="10" fill="#0e2233" stroke="#3da9fc"/><text x="130" y="147" text-anchor="middle" fill="#cfe8ff" font-size="12.5" font-weight="700">AI Native 体系 / 工具</text>
+      <text x="262" y="100" text-anchor="middle" fill="#6f9180" font-size="26">→</text>
+      <rect x="300" y="62" width="210" height="62" rx="12" fill="#0f2a20" stroke="#00c37a"/><text x="405" y="89" text-anchor="middle" fill="#cdeede" font-size="14" font-weight="700">端到端交付</text><text x="405" y="109" text-anchor="middle" fill="#5fe3a8" font-size="12">获单 · 研发 · 交付</text>
+      <text x="545" y="100" text-anchor="middle" fill="#6f9180" font-size="26">→</text>
+      <rect x="585" y="62" width="150" height="62" rx="12" fill="#13291e" stroke="#00c37a"/><text x="660" y="89" text-anchor="middle" fill="#5fe3a8" font-size="13" font-weight="700">极低成本</text><text x="660" y="109" text-anchor="middle" fill="#5fe3a8" font-size="13" font-weight="700">极高效率</text>
+    </svg>
+    <div class="cap">FDE 作战单元：FDE 工程师 + agent 编队 + AI Native 体系/工具，端到端跑通获单—研发—交付。</div>
+  </div>
+  <div class="vp"><div class="who">本章收口</div><p>FDE 是 AI Native 组织的<strong class="g">最小作战单元</strong>。当一个个 FDE 小队跑起来，组织就真正从「大组织、大投入」转向「以人为本、小组织大创新」。</p></div>
+</section>
+
+<!-- ===== CHAPTER 6 (Agent 平台) ===== -->
+<section class="chap deck" id="c6agent">
+  <div class="cnum">06</div>
+  <div class="kicker">第六章</div>
+  <h1>我对 Agent<br>开发平台的理解</h1>
+  <div class="clist">
+    <span><b>6.1</b>　核心不在「开发」，在数据（机理）驱动的决策</span>
+    <span><b>6.2</b>　误区：只做 SOP 的 Agent 化，企业 ROI 极低</span>
+    <span><b>6.3</b>　案例：星巴克 Deep Brew</span>
+    <span><b>6.4</b>　一句话：AI 应用为象，数据为理（以象推理）</span>
+  </div>
+</section>
+
+<section class="deck" id="c6-core">
+  <div class="kicker">6.1 · 核心论点</div>
+  <h2>Agent 开发平台的核心，不在「开发」<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="vp"><div class="who">我的判断</div><p>很多人把 Agent 开发平台理解成「更快地开发 Agent」。我认为不是——它的核心在于 <strong class="g">数据（机理）驱动的科学决策与执行</strong>。开发只是手段，机理才是引擎。</p></div>
+  <div class="grid g2">
+    <div class="card"><span class="ic">🧩</span><h3>表层理解：开发提效</h3><p>把平台当作「拼装 Agent 的工厂」，关注的是开发快不快、工具好不好用——这只是入口。</p></div>
+    <div class="card hl"><span class="ic">🧬</span><h3>本质理解：机理驱动决策</h3><p>平台真正的价值，是把业务<strong class="g">数据与机理</strong>沉淀进来，让 Agent 做出科学的决策与执行，而不只是跑流程。</p></div>
+  </div>
+</section>
+
+<section class="deck" id="c6-roi">
+  <div class="kicker">6.2 · 误区</div>
+  <h2>只把传统 SOP 做成 Agent，企业级 ROI 极低<span class="aud exec">面向高层</span></h2>
+  <p>如果 Agent 只是对传统 SOP 的复刻，它能解决的，仅是个人 / 一线人员「工作重复、效率低」的问题——对个人有感，但对一家企业整体，提升不明显、<strong class="danger">ROI 极低（10% 左右）</strong>。</p>
+  <div class="fig">
+    <svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+      <defs><linearGradient id="rb" x1="0" x2="1"><stop offset="0" stop-color="#009a57"/><stop offset="1" stop-color="#5fe3a8"/></linearGradient></defs>
+      <text x="232" y="58" text-anchor="end" fill="#a3c2b3" font-size="14">只做 SOP 的 Agent 化</text>
+      <text x="232" y="77" text-anchor="end" fill="#6f9180" font-size="11.5">个人 / 一线提效</text>
+      <rect x="248" y="44" width="56" height="34" rx="7" fill="#44557a"/>
+      <text x="316" y="66" fill="#a3c2b3" font-size="14" font-weight="700">ROI 10% 左右</text>
+      <text x="232" y="135" text-anchor="end" fill="#cdeede" font-size="14">数据（机理）驱动决策</text>
+      <text x="232" y="154" text-anchor="end" fill="#6f9180" font-size="11.5">企业级增值</text>
+      <rect x="248" y="121" width="430" height="34" rx="7" fill="url(#rb)"/>
+      <text x="668" y="143" text-anchor="end" fill="#04120b" font-size="14" font-weight="800">ROI 显著跃升</text>
+      <text x="248" y="182" fill="#6f9180" font-size="11.5">参照：星巴克 Deep Brew 在关键 AI 项目上 ROI 约 +30%</text>
+    </svg>
+    <div class="cap">同样投入，路线不同，企业级 ROI 天差地别。</div>
+  </div>
+  <div class="callout"><p><strong>关键区别</strong>：SOP 的 Agent 化是「把人做的步骤交给机器」；机理驱动是「让机器基于数据做出比人更科学的决策」。前者是省力，后者是增值。</p></div>
+</section>
+
+<section class="deck" id="c6-starbucks">
+  <div class="kicker">6.3 · 案例</div>
+  <h2>星巴克 Deep Brew：AI 不在替咖啡师做咖啡<span class="aud exec">面向高层</span></h2>
+  <p>星巴克 2019 年起的 AI 平台 Deep Brew 最能说明问题：它几乎不碰「咖啡师按 SOP 做咖啡」这件事，而是把全渠道数据变成一个个<strong class="g">科学决策</strong>。</p>
+  <div class="grid g4">
+    <div class="card"><span class="num">个性化</span><h3 style="margin-top:6px">千人千面推荐</h3><p>结合订单、会员、天气等数据，推送个性化商品与促销。</p></div>
+    <div class="card"><span class="num">库存</span><h3 style="margin-top:6px">需求预测</h3><p>预测各店需求，降低缺货与浪费。</p></div>
+    <div class="card"><span class="num">用工</span><h3 style="margin-top:6px">预测式排班</h3><p>按客流、本地活动、天气科学排班，减少过岗/缺岗。</p></div>
+    <div class="card"><span class="num">供应链</span><h3 style="margin-top:6px">决策优化</h3><p>把选址、补货、调度变成数据驱动的决策。</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:6px">
+    <div class="stat card"><span class="v">≈ +30%</span><span class="l">关键 AI 项目 ROI 提升</span></div>
+    <div class="stat card"><span class="v">+7%</span><span class="l">个性化带来的食品搭售提升</span></div>
+  </div>
+  <div class="vp"><div class="who">案例启示</div><p>同样是「用 AI」，星巴克赢在把<strong class="g">数据与机理</strong>变成每一个决策的依据，而不是把某个岗位的 SOP 自动化——这正是企业级 ROI 与个人级提效的分水岭。</p></div>
+</section>
+
+<section class="deck" id="c6-summary">
+  <div class="kicker">6.4 · 一句话</div>
+  <h2>一句话总结<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <div class="vp" style="border-left-color:var(--green)"><div class="who">记住这句</div><p style="font-size:27px;font-weight:800"><span class="g">AI 应用为象，数据为理 —— 以象推理。</span></p><p style="margin-top:12px;font-size:17px;color:var(--ink-dim)">具体技术表现为 <strong class="g">本体（行业解释层）</strong>。</p></div>
+  <p>做 Agent 开发平台，别把劲儿全使在「开发更多 Agent」上；真正的护城河，是沉淀业务数据与机理，让平台具备<strong class="g">科学决策</strong>的能力。表里兼修，ROI 才能从个人级跃迁到企业级。</p>
+</section>
+
+<section class="chap deck" id="c4">
+  <div class="cnum">07</div>
+  <div class="kicker">第七章</div>
+  <h1>青岛地铁<br>最佳实践</h1>
+  <div class="clist">
+    <span><b>7.1</b>　背景：我们如何深度应用 AI</span>
+    <span><b>7.2</b>　实践一：用 Claude 快速开发 Ontology 平台 <b>【现场演示】</b></span>
+    <span><b>7.3</b>　实践二：AI 场景快速开发 <b>【现场演示】</b></span>
+    <span><b>7.4</b>　实践三：AI 驱动的项目管理 <b>【现场演示】</b></span>
+    <span><b>7.5</b>　成效与启示</span>
+  </div>
+</section>
+
+<section class="deck" id="c4-bg">
+  <div class="kicker">7.1 · 背景</div>
+  <h2>我们在青岛地铁 AI 项目中的深度应用<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <p>青岛地铁是行业内非常激进、创新的标杆。我们以 AI Native 的方式参与其人工智能项目，把 Claude 等 AI Coding 工具用到了开发的核心环节——不是「点缀式」用 AI，而是让 AI 贯穿平台、场景与管理三条线。</p>
+  <div class="grid g3">
+    <div class="card"><span class="ic">🧬</span><h3>Ontology 平台</h3><p>构建行业知识本体，作为 AI 理解地铁业务的「上下文底座」。</p></div>
+    <div class="card"><span class="ic">🎬</span><h3>AI 场景</h3><p>面向具体业务痛点，快速开发可落地的 AI 应用场景。</p></div>
+    <div class="card"><span class="ic">📋</span><h3>项目管理</h3><p>用 AI 驱动需求、进度、协同，让管理本身也 AI 原生化。</p></div>
+  </div>
+  <div class="callout"><p style="font-size:14px;color:var(--ink-faint)">说明：以下三节为<strong class="g">现场实操演示</strong>，配少量讲解。演示占位框处请切换到真实系统/录屏进行展示。</p></div>
+</section>
+
+<section class="deck" id="c4-onto">
+  <div class="kicker">7.2 · 实践一</div>
+  <h2>用 Claude 快速开发 Ontology 平台<span class="aud dev">面向研发</span></h2>
+  <p>本体（Ontology）是把地铁业务的概念、关系、规则结构化，让 AI 真正「懂业务」。传统做法耗时数月；借助 Claude，我们把建模—生成—验证的循环大幅压缩。</p>
+  <div class="fig">
+    <svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto" font-family="sans-serif">
+      <g stroke="#1e3a2c" stroke-width="1.5">
+        <line x1="450" y1="110" x2="250" y2="50"/><line x1="450" y1="110" x2="650" y2="50"/>
+        <line x1="450" y1="110" x2="220" y2="170"/><line x1="450" y1="110" x2="680" y2="170"/>
+        <line x1="250" y1="50" x2="650" y2="50"/>
+      </g>
+      <g font-size="13" text-anchor="middle">
+        <circle cx="450" cy="110" r="34" fill="#00c37a"/><text x="450" y="115" fill="#04120b" font-weight="800">线网</text>
+        <circle cx="250" cy="50" r="26" fill="#13291e" stroke="#00c37a"/><text x="250" y="55" fill="#cdeede">车站</text>
+        <circle cx="650" cy="50" r="26" fill="#13291e" stroke="#00c37a"/><text x="650" y="55" fill="#cdeede">设备</text>
+        <circle cx="220" cy="170" r="26" fill="#13291e" stroke="#00c37a"/><text x="220" y="175" fill="#cdeede">工单</text>
+        <circle cx="680" cy="170" r="26" fill="#13291e" stroke="#00c37a"/><text x="680" y="175" fill="#cdeede">人员</text>
+      </g>
+      <text x="450" y="205" fill="#6f9180" font-size="12" text-anchor="middle">本体示意：概念 + 关系 + 规则，构成 AI 理解业务的知识底座</text>
+    </svg>
+    <div class="cap">概念图（示意）。现场可替换为真实本体图谱截图。</div>
+  </div>
+  <div class="demo">
+    <span class="tag">▶ 现场演示</span>
+    <h3>演示：从一句话需求到本体模型</h3>
+    <div class="frame"><span class="ph">🖥️</span><span>[ 切换到 Claude Code / Ontology 平台实操或录屏 ]</span></div>
+    <div class="pts"><ul class="clean">
+      <li>展示：用自然语言描述业务 → Claude 生成本体结构草案</li>
+      <li>展示：迭代修正关系与规则，实时校验</li>
+      <li>对比：传统建模周期 vs 本次耗时（请填入真实数据）</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="deck" id="c4-scene">
+  <div class="kicker">7.3 · 实践二</div>
+  <h2>AI 场景的快速开发<span class="aud dev">面向研发</span></h2>
+  <p>有了本体底座，面向具体痛点的 AI 场景可以「按需快速长出来」。从需求到可演示原型，周期从周级压到天级。</p>
+  <div class="demo">
+    <span class="tag">▶ 现场演示</span>
+    <h3>演示：一个真实业务场景的端到端开发</h3>
+    <div class="frame"><span class="ph">🎬</span><span>[ 切换到真实 AI 场景 Demo / 录屏 ]</span></div>
+    <div class="pts"><ul class="clean">
+      <li>选取一个代表性场景（如：设备故障智能研判 / 客流分析 / 智能问数——请确认）</li>
+      <li>展示：用 Claude 从需求 → 代码 → 联调 → 可运行原型</li>
+      <li>突出：研发人员角色从「写每一行」转为「指挥与校验」</li>
+      <li>量化：开发提效倍数 / 投入人力对比（请填入真实数据）</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="deck" id="c4-pm">
+  <div class="kicker">7.4 · 实践三</div>
+  <h2>AI 驱动的项目管理<span class="aud exec">面向高层</span><span class="aud dev">面向研发</span></h2>
+  <p>AI Native 不止于写代码——我们让管理本身也 AI 原生化：需求拆解、进度跟踪、风险预警、跨团队协同，尽量减少「靠人传人」的信息差。</p>
+  <div class="demo">
+    <span class="tag">▶ 现场演示</span>
+    <h3>演示：AI 如何辅助项目管理</h3>
+    <div class="frame"><span class="ph">📊</span><span>[ 切换到项目管理工具 / AI 协同实操 ]</span></div>
+    <div class="pts"><ul class="clean">
+      <li>展示：需求/任务自动拆解与分配</li>
+      <li>展示：进度与风险的 AI 汇总、自动生成周报/简报</li>
+      <li>呼应第一章「零信息差」：信息在系统中流转，而非反复开会传递</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="deck" id="c4-result">
+  <div class="kicker">7.5 · 成效与启示</div>
+  <h2>从青岛地铁实践中，我们学到了什么<span class="aud exec">面向高层</span></h2>
+  <div class="grid g3">
+    <div class="stat card"><span class="v">天级</span><span class="l">场景开发周期（原周/月级）<br><span style="font-size:11px">※ 占位，请填真实数据</span></span></div>
+    <div class="stat card"><span class="v">XX×</span><span class="l">关键环节开发提效<br><span style="font-size:11px">※ 占位，请填真实数据</span></span></div>
+    <div class="stat card"><span class="v">XX%</span><span class="l">人力/成本释放<br><span style="font-size:11px">※ 占位，请填真实数据</span></span></div>
+  </div>
+  <div class="grid g2" style="margin-top:6px">
+    <div class="card"><span class="ic">💡</span><h3>启示一：底座先行</h3><p>Ontology 本体让 AI「懂业务」，是后续所有 AI 场景高效落地的前提。</p></div>
+    <div class="card"><span class="ic">💡</span><h3>启示二：角色升级</h3><p>研发从「写代码」升级为「指挥 AI + 把关质量」，这是 AI Native 的真实体感。</p></div>
+  </div>
+  <div class="vp"><div class="who">交付观</div><p>我们交付给客户的，不只是<strong>实实在在的价值</strong>（成本降、效率升），更是一套<strong class="g">可持续演进的体系与工具</strong>——项目结束后客户仍能自我进化，而非一次性成果。</p></div>
+</section>
+
+<!-- END -->
+<footer class="end deck">
+  <div class="kicker">结语 · 行动呼吁</div>
+  <p class="q">AI Native 是生存题，AI Coding 是入场券。<br>今天开始，让 20–30% 的人先动起来。</p>
+  <p style="color:var(--ink-faint);margin-top:20px;font-size:14px">青岛智运科技 · AI Native + AI Coding 企业培训 · 2026　|　Q&A · 现场演示</p>
+</footer>
+
+<script>
+  const bar=document.getElementById('progress');
+  function upd(){const h=document.documentElement;const sc=h.scrollTop;const max=h.scrollHeight-h.clientHeight;bar.style.width=(max>0?(sc/max*100):0)+'%';}
+  window.addEventListener('scroll',upd);window.addEventListener('resize',upd);upd();
+  const secs=[...document.querySelectorAll('section')];
+  function cur(){const y=window.scrollY+window.innerHeight*0.35;let i=0;secs.forEach((s,idx)=>{if(s.offsetTop<=y)i=idx;});return i;}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();secs[Math.min(cur()+1,secs.length-1)].scrollIntoView({behavior:'smooth'});}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();secs[Math.max(cur()-1,0)].scrollIntoView({behavior:'smooth'});}
+  });
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.style.opacity=1;en.target.style.transform='none';}}),{threshold:0.06});
+  document.querySelectorAll('.card,.vp,.demo,table,.fig,.callout,.stat').forEach(el=>{el.style.opacity=0;el.style.transform='translateY(16px)';el.style.transition='opacity .6s ease,transform .6s ease';io.observe(el);});
+</script>
+</body>
+</html>
